@@ -1,0 +1,89 @@
+﻿@model PremiumHousing.Model.UserViewModel
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@{
+            ViewData["Title"] = "Login Page";
+        }</title>
+    <link rel="stylesheet" href="~/css/LoginStyle.css">
+    <!-- Include SweetAlert CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@("@")11/dist/sweetalert2.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+    <div class="wrapper">
+        <form asp-action="Login" method="post">
+            <h2>Login</h2>
+            <div class="input-field">
+                <input asp-for="Username" type="text" required>
+                <label asp-for="Username">Enter your Username</label>
+            </div>
+            <div class="input-field">
+                <input asp-for="Password" type="password" id="password" required>
+                <label asp-for="Password">Enter your password</label>
+                <button type="button" class="toggle-btn" onclick="togglePasswordVisibility('password')">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+            <div class="forget">
+                <label for="remember">
+                    <input type="checkbox" id="remember">
+                    <p>Remember me</p>
+                </label>
+                <a href="#">Forgot password?</a>
+            </div>
+            <button type="submit">Log In</button>
+            <div class="register">
+                <p>Don't have an account? <a asp-controller="Usre" asp-action="Register">Register</a></p>
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    function togglePasswordVisibility(inputId) {
+        const input = document.getElementById(inputId);
+        const icon = input.nextElementSibling.querySelector("i");
+
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            input.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    }
+</script>
+<style>
+    .input-container {
+        position: relative;
+        width: 100%;
+    }
+
+        .input-container input[type="password"],
+        .input-container input[type="text"] {
+            width: 100%;
+            padding-right: 35px; /* Space for the eye button */
+        }
+
+    .toggle-btn {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #888;
+        cursor: pointer;
+        padding: 0;
+    }
+
+        .toggle-btn i {
+            font-size: 18px;
+        }
+
+        .toggle-btn:hover {
+            color: #000;
+        }
+</style>

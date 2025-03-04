@@ -1,0 +1,259 @@
+﻿ @model PremiumHousing.Model.UserDtoModle;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @{
+        ViewData["Titel"] = "Registration";
+    }
+    <link rel="stylesheet" href="~/css/StyleRegister.css">
+    <!-- Include SweetAlert CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@("@")11/dist/sweetalert2.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+</head>
+<body>
+    <div class="container">
+        <!-- Title section -->
+        <div class="title">Registration</div>
+        <div class="content">
+            <!-- Registration form -->
+            <form asp-action="Register" method="post">
+                <div class="user-details">
+                    <div class="input-box">
+                        <label asp-for="FullName"></label>
+                        <input asp-for="FullName" type="text" placeholder="Enter your Name">
+                        <span asp-validation-for="FullName"></span>
+                    </div>
+                    <!-- Input for Username -->
+                    <div class="input-box">
+                        <label asp-for="Username"></label>
+                        <input asp-for="Username" type="text" placeholder="Enter your Username">
+                        <span asp-validation-for="Username"></span>
+                    </div>
+                    <!-- Input for Email -->
+                    <div class="input-box">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" type="email" placeholder="Enter your Email">
+                        <span asp-validation-for="Email"></span>
+                    </div>
+                    <!-- Input for Phone Number -->
+                    <div class="input-box">
+                        <label asp-for="PhoneNumber"></label>
+                        <input asp-for="PhoneNumber" type="text" placeholder="Enter your Number">
+                        <span asp-validation-for="PhoneNumber"></span>
+                    </div>
+                    <!-- Input for Password -->
+                    <div class="input-box">
+                        <label asp-for="Password"></label>
+                        <div class="input-container">
+                            <input asp-for="Password" type="password" placeholder="Enter your password" id="password">
+                            <button type="button" class="toggle-btn" onclick="togglePasswordVisibility('password')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <span asp-validation-for="Password"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="input-box">
+                        <label asp-for="PasswordConfirmed"></label>
+                        <div class="input-container">
+                            <input asp-for="PasswordConfirmed" type="password" placeholder="Confirm your password" id="confirmPassword">
+                            <button type="button" class="toggle-btn" onclick="togglePasswordVisibility('confirmPassword')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <span asp-validation-for="PasswordConfirmed"></span>
+                        </div>
+
+                    </div>
+                    <div class="input-container">
+                        <div class="gender-details">
+                            <!-- Radio buttons for gender selection -->
+                            <div class="category">
+                                <span asp-validation-for="Gender" class="gender-title">Gender :</span>
+                                @foreach (var gender in Enum.GetValues(typeof(PremiumHousing.Model.Enums.Gender)))
+                                {
+                                    <label for="Gender_@(gender)">
+                                        <input asp-for="Gender" type="radio" name="Gender" id="Gender_@(gender)" value="@(gender)" />
+                                        <span class="dot @(gender.ToString()?.ToLower())"></span>
+                                        <span class="gender">@(gender)</span>
+                                    </label>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-container">
+                        <div class="unique-radio-input">
+                            <div class="category">
+                                <span asp-validation-for="Type" style="font-size: 20px; font-weight: 500;">Are You A Business Owner?</span>
+                                <label for="Yas">
+                                    <input asp-for="Type" type="radio" id="Yas" name="Type" value="true" onclick="toggleSubForm(true)">
+                                    <span class="dot"></span>
+                                    Yes
+                                </label>
+                                <label for="no">
+                                    <input asp-for="Type" type="radio" id="no" name="Type" value="false" onclick="toggleSubForm(false)">
+                                    <span class="dot"></span>
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Business Information -->
+                    <div class="new-business-info-container" id="subForm" style="display:none;" >
+                        <div class="new-input-field">
+                            <label asp-for="BusinessPhoneNumper"></label>
+                            <input asp-for="BusinessPhoneNumper" type="text" placeholder="Enter your Business Phone Number">
+                            <span asp-validation-for="BusinessPhoneNumper"></span>
+                        </div>
+                        <div class="new-input-field">
+                            <label asp-for="BusinessLicenseNumper"></label>
+                            <input asp-for="BusinessLicenseNumper" type="text" placeholder="Enter Business License Number">
+                            <span asp-validation-for="BusinessLicenseNumper"></span>
+                        </div>
+                        <div class="new-input-field">
+                            <label asp-for="TaxNumber"></label>
+                            <input asp-for="TaxNumber" type="text" placeholder="Enter your Business Tax Number">
+                            <span asp-validation-for="TaxNumber"></span>
+                        </div>
+                        <div class="new-input-field">
+                            <label asp-for="BusinessType"></label>
+                            <select asp-for="BusinessType" type="text" placeholder="Enter your Business Type">
+                                @foreach (var BusinessType in Enum.GetValues(typeof(PremiumHousing.Model.Enums.BusinessType)))
+                                {
+                                    <option asp-for="BusinessType">@BusinessType</option>
+                                }
+                            </select>
+                            <span asp-validation-for="BusinessType"></span>
+                        </div>
+                        <div class="new-input-field">
+                            <label asp-for="BusinessAddress"></label>
+                            <select asp-for="BusinessAddress" type="text" placeholder="Enter your Business Address">
+                                @foreach (var Address in Enum.GetValues(typeof(PremiumHousing.Model.Enums.City)))
+                                {
+                                    <option asp-for="BusinessAddress">@Address</option>
+                                }
+                            </select>
+                            <span asp-validation-for="BusinessAddress"></span>
+                        </div>
+                    </div>
+
+                        <!-- Submit button -->
+                        <div class="input-container">
+                            <div class="button">
+                                <input type="submit" value="Register">
+                            </div>
+                        </div>
+                        <div class="register">
+                            <p>Do you have an account? <a asp-controller="Usre" asp-action="Login">Login</a></p>
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+
+    <partial name="_Alter" />
+</body>
+<script>
+    function togglePasswordVisibility(inputId) {
+        const input = document.getElementById(inputId);
+        const icon = input.nextElementSibling.querySelector("i");
+
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            input.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    }
+</script>
+<!-- for Business Informtion show -->
+<script>
+    function toggleSubForm() {
+        var yesOption = document.getElementById("Yas");
+        var subForm = document.getElementById("subForm");
+
+        // If "Yes" is selected, show the sub-form
+        if (yesOption.checked) {
+            subForm.style.display = "flex";
+        } else {
+            subForm.style.display = "none";
+        }
+    }
+</script>
+<!-- for Business Informtion -->
+<style>
+    .new-business-info-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    /* Ensure the first two input fields are displayed in the same row */
+    .new-input-field {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .new-business-info-container > .new-input-field:nth-child(1),
+    .new-business-info-container > .new-input-field:nth-child(2) {
+        flex: 0 0 48%; /* Display the first two fields side by side */
+    }
+
+    .new-input-field label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .new-input-field input,
+    .new-input-field select {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+</style>    
+<style>
+
+    .input-container {
+        position: relative;
+        width: 100%;
+    }
+
+        .input-container input[type="password"],
+        .input-container input[type="text"] {
+            width: 100%;
+            padding-right: 35px; /* Space for the eye button */
+        }
+
+    .toggle-btn {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #888;
+        cursor: pointer;
+        padding: 0;
+    }
+
+        .toggle-btn i {
+            font-size: 18px;
+        }
+
+        .toggle-btn:hover {
+            color: #000;
+        }
+
+</style>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
